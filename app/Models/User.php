@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -21,6 +22,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
+        'address',
+        'iamge',
+
     ];
 
     /**
@@ -45,5 +50,21 @@ class User extends Authenticatable
     public function orders()
     {
         return $this->hasMany(Order::class );
+    }
+
+    /**
+     * Get all of the rates for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function rates(): HasMany
+    {
+        return $this->hasMany(Rate::class, 'user_id', 'id');
+    }
+
+    
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 }
