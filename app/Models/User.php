@@ -22,6 +22,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'is_admin',
+        'address',
+        'iamge',
+
     ];
 
     /**
@@ -42,7 +46,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-    
+
     /**
      * Get all of the rates for the User
      *
@@ -51,5 +55,9 @@ class User extends Authenticatable
     public function rates(): HasMany
     {
         return $this->hasMany(Rate::class, 'user_id', 'id');
+    }
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 }
