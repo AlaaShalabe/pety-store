@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->float('total_Price');
+            $table->float('total_Price')->nullable();
+            $table->enum('status', ['waitting', 'done'])->nullable()->default('waitting');
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
