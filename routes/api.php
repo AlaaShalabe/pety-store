@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Message\FeedbackController;
+use App\Http\Controllers\MessageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -16,4 +18,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::post('feedback', [FeedbackController::class, 'store']);
+
+Route::middleware('isAdmin')->group(function () {
+    Route::get('feedbacks', [FeedbackController::class, 'index'])->name('feedbacks.index');
+    Route::get('feedbacks/{message}', [FeedbackController::class, 'show'])->name('feedbacks.show');
+    Route::delete('feedbacks/{message}', [FeedbackController::class, 'destroy'])->name('feedbacks.destroy');
 });

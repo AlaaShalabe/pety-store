@@ -52,17 +52,12 @@ class User extends Authenticatable
         return $this->hasMany(Order::class );
     }
 
-    /**
-     * Get all of the rates for the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
     public function rates(): HasMany
     {
         return $this->hasMany(Rate::class, 'user_id', 'id');
     }
 
-    
+
     public function messages()
     {
         return $this->hasMany(Message::class);
