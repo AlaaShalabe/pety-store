@@ -26,6 +26,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         if ($request->validated()) {
+            $data['image'] = $request->file('image')->store('public/post_images');
             return Product::create($request->all());
         }
     }
