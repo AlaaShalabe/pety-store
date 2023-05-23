@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Rate;
 use Illuminate\Http\Request;
 
 class RateController extends Controller
@@ -13,7 +14,8 @@ class RateController extends Controller
      */
     public function index()
     {
-        //
+        return Rate::all();
+
     }
 
     /**
@@ -24,7 +26,8 @@ class RateController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        return Rate::create($request->all());
+
     }
 
     /**
@@ -35,19 +38,20 @@ class RateController extends Controller
      */
     public function show($id)
     {
-        //
+        return Rate::find($id);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  \App\Models\Rate $rate
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Rate $rate)
     {
-        //
+        $rate->update($request->all());
+        return $rate;
     }
 
     /**
@@ -58,6 +62,6 @@ class RateController extends Controller
      */
     public function destroy($id)
     {
-        //
+        return Rate::destroy($id);
     }
 }
