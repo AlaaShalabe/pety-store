@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('messages', function (Blueprint $table) {
             $table->id();
             $table->string('message');
-            $table->boolean('is_feedback')->default(false);
-            $table->foreignId('user_id');
+            $table->string('email');
+            $table->boolean('is_feedback')->default(true);
             $table->timestamps();
         });
     }

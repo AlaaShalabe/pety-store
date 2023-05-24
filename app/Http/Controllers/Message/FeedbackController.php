@@ -13,33 +13,30 @@ class FeedbackController extends Controller
 {
     public function index()
     {
-        $messages =  Message::wher('is_feedback', false)->get();
+        $messages =  Message::where('is_feedback', '=', 1)->get();
         return FeedbackResource::collection($messages);
     }
     public function store(FeedbackRequest $request)
     {
         $data = $request->validated();
-        $data['user_is'] = auth()->user()->id;
-        $feedback = Message::create([
-            'message'      => $data->message,
-            'is_feedback'   => $data->is_feedback,
-        ]);
+        $data['is_feedback'] = true;
+        $feedback = Message::create($data);
         return response()->json([
             'message' => 'Message stored successfully.',
-            'data' => $feedback,
+            'data' => new FeedbackResource($feedback),
         ]);
     }
     public function show(Message $message)
     {
-        $feedback = Message::findOrFail($message);
+        Message::find($message);
         return response()->json([
-            'data' => new FeedbackResource($feedback)
+            'data' => new FeedbackResource($message)
         ]);
     }
     public function destroy(Message $message)
     {
-        $feedback = Message::findOrFail($message);
-        $feedback->delete();
+        Message::find($message);
+        $message->delete();
         return response()->json([
             'message' => 'Message deleted successfully.',
         ]);
