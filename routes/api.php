@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Message\FeedbackController;
 use App\Http\Controllers\Message\SupportController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -40,3 +41,6 @@ Route::controller(SupportController::class)->middleware('isAdmin')->group(functi
     Route::get('supports/{message}',  'show')->name('supportes.show');
     Route::delete('supports/{message}', 'destroy')->name('supportes.destroy');
 });
+
+Route::resource('products', ProductController::class);
+
