@@ -45,15 +45,14 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
     public function update(StoreProduct $request, Product $product)
     {
         $data = $request->validated();
-        $data['image'] = $request->file('image')->store('public/post_images');
-        $product->save($data);
+        $data['image']=$request->file('image')->store('public/post_images');
+        $product->update($data);
         return response()->json([
             'message' => 'Product updated successfully.',
             'data' => new ProductResource($product),

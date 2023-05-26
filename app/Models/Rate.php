@@ -11,8 +11,9 @@ class Rate extends Model
     use HasFactory;
     protected $fillable = [
         'rate',
+        'user_id',
+        'product_id'
     ];
-
 
     public function user(): BelongsTo
     {
