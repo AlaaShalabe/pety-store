@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreCategory;
+use App\Http\Resources\CategoryResource;
 
 class CategoryController extends Controller
 {
@@ -14,7 +15,8 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return Category::all();
+        $categories = Category::all();
+        return CategoryResource::collection($categories);
     }
 
     /**
@@ -23,22 +25,25 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCategory $request)
     {
-        if ($request->validated()) {
-            return Category::create($request->all());
-        }
+        $data = $request->validated();
+        $category = Category::create($data);
+        return response()->json([
+            'message' => 'Category stored successfully.',
+            'data' => new CategoryResource($category),
+        ]);
     }
 
-    /**
+       /**
      * Display the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        return Category::find($id);
+        return $category->load('products');
     }
 
     /**
@@ -48,10 +53,14 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(StoreCategory $request, Category $category)
     {
-        $category->update($request->all());
-        return $category;
+        $data = $request->validated();
+        $category->update($data);
+        return response()->json([
+            'message' => 'Category updated successfully.',
+            'data' => new CategoryResource($category),
+        ]);
     }
 
     /**
@@ -62,6 +71,9 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        return Category::destroy($id);
+        Category::destroy($id);
+        return response()->json([
+            'message' => 'Category deleted successfully.',
+        ]);
     }
 }

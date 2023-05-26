@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Message\FeedbackController;
 use App\Http\Controllers\Message\SupportController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -43,4 +45,9 @@ Route::controller(SupportController::class)->middleware('isAdmin')->group(functi
 });
 
 Route::resource('products', ProductController::class);
+
+Route::resource('rates', RateController::class);
+
+Route::resource('categories', CategoryController::class);
+
 
