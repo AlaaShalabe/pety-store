@@ -24,6 +24,7 @@ class ProductController extends Controller
     {
         $data = $request->validated();
         $data['image'] = $request->file('image')->store('public/post_images');
+        $data['slug'] =str()->slug($request->slug);
         $product = Product::create($data);
         return response()->json([
             'message' => 'Product stored successfully.',
