@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProductResource;
 use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreProduct;
+
 
 class ProductController extends Controller
 {
@@ -14,21 +16,20 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return Product::all();
+        $products = Product::with('rates')->withCount('rates')->get();
+        return response()->json(['products' => $products]); 
     }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    
+    public function store(StoreProduct $request)
     {
-        if ($request->validated()) {
-            $data['image'] = $request->file('image')->store('public/post_images');
-            return Product::create($request->all());
-        }
+        $data = $request->validated();
+        $data['image'] = $request->file('image')->store('public/post_images');
+        $data['slug'] =str()->slug($request->slug);
+        $product = Product::create($data);
+        return response()->json([
+            'message' => 'Product stored successfully.',
+            'data' => new ProductResource($product),
+        ]);
     }
 
     /**
@@ -37,22 +38,26 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Product $product)
     {
-        return Product::find($id);
+        return $product->load('rates');
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(StoreProduct $request, Product $product)
     {
-        $product->update($request->all());
-        return $product;
+        $data = $request->validated();
+        $data['image']=$request->file('image')->store('public/post_images');
+        $product->update($data);
+        return response()->json([
+            'message' => 'Product updated successfully.',
+            'data' => new ProductResource($product),
+        ]);
     }
 
     /**
@@ -63,6 +68,9 @@ class ProductController extends Controller
      */
     public function destroy($id)
     {
-        return Product::destroy($id);
+        Product::destroy($id);
+        return response()->json([
+            'message' => 'Product deleted successfully.',
+        ]);
     }
 }

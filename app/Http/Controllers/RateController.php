@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RateResource;
 use App\Models\Rate;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class RateController extends Controller
 {
@@ -14,8 +16,8 @@ class RateController extends Controller
      */
     public function index()
     {
-        return Rate::all();
-
+        $rates = Rate::all();
+        return RateResource::collection($rates);
     }
 
     /**
@@ -26,19 +28,13 @@ class RateController extends Controller
      */
     public function store(Request $request)
     {
-        return Rate::create($request->all());
-
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        return Rate::find($id);
+        $data = $request->all();
+        $data['user_id'] = Auth::user()->id;
+        $rate = Rate::create($data);
+        return response()->json([
+            'message' => 'Rate stored successfully.',
+            'data' => new RateResource($rate),
+        ]);
     }
 
     /**
@@ -50,8 +46,12 @@ class RateController extends Controller
      */
     public function update(Request $request, Rate $rate)
     {
-        $rate->update($request->all());
-        return $rate;
+        $data = $request->all();
+        $rate->update($data);
+        return response()->json([
+            'message' => 'Rate updated successfully.',
+            'data' => new RateResource($rate),
+        ]);
     }
 
     /**
@@ -62,6 +62,9 @@ class RateController extends Controller
      */
     public function destroy($id)
     {
-        return Rate::destroy($id);
+        Rate::destroy($id);
+        return response()->json([
+            'message' => 'Product deleted successfully.',
+        ]);
     }
 }
