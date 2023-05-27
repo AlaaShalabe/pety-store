@@ -41,3 +41,23 @@ Route::controller(SupportController::class)->middleware('isAdmin')->group(functi
     Route::get('supports/{message}',  'show')->name('supportes.show');
     Route::delete('supports/{message}', 'destroy')->name('supportes.destroy');
 });
+Route::controller(CategoryController::class)->middleware('isAdmin')->group(function () {
+    Route::get('categories',  'index')->withoutMiddleware('isAdmin');
+    Route::get('categories/{category}',  'show')->withoutMiddleware('isAdmin');
+    Route::post('categories', 'store')->name('categories.store');
+    Route::put('categories/{category}',  'update')->name('categories.update');
+    Route::delete('categories/{category}', 'destroy')->name('categories.destroy');
+});
+Route::controller(ProductController::class)->middleware('isAdmin')->group(function () {
+    Route::get('products',  'index')->withoutMiddleware('isAdmin');
+    Route::get('products/{product}',  'show')->withoutMiddleware('isAdmin');
+    Route::post('products', 'store')->name('products.store');
+    Route::put('products/{product}',  'update')->name('products.update');
+    Route::delete('products/{product}', 'destroy')->name('products.destroy');
+});
+Route::controller(RateController::class)->middleware('isAdmin')->group(function () {
+    Route::get('rates',  'index')->name('rates.index');
+    Route::post('rates', 'store')->withoutMiddleware('isAdmin');
+    Route::put('rates/{rate}',  'update')->withoutMiddleware('isAdmin');
+    Route::delete('rates/{rate}', 'destroy')->withoutMiddleware('isAdmin');
+});
