@@ -26,10 +26,9 @@ class StoreProduct extends FormRequest
         return [
             'name' => 'required|string',
             'description' => 'required|string',
-            'price' => 'required|float',
+            'price' => 'required',
             'category_id' => 'required',
-            'slug' => 'required|string',
-            'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
+            //  'image' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048'
         ];
     }
 }
