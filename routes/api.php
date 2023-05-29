@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Message\FeedbackController;
 use App\Http\Controllers\Message\SupportController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,9 +41,21 @@ Route::controller(FeedbackController::class)->middleware('isAdmin')->group(funct
 
 Route::controller(SupportController::class)->middleware('isAdmin')->group(function () {
     Route::post('support', 'store')->withoutMiddleware('isAdmin');
-    Route::get('supports',  'index')->name('supportes.index');
-    Route::get('supports/{message}',  'show')->name('supportes.show');
-    Route::delete('supports/{message}', 'destroy')->name('supportes.destroy');
+    Route::get('supports',  'index')->name('supports.index');
+    Route::get('supports/{message}',  'show')->name('supports.show');
+    Route::delete('supports/{message}', 'destroy')->name('supports.destroy');
+});
+Route::controller(CartController::class)->group(function () {
+    Route::post('cart', 'store');
+    Route::get('carts',  'index')->name('carts.index');
+    Route::get('carts/{cart}',  'show')->name('carts.show');
+    Route::delete('carts/{cart}', 'destroy')->name('carts.destroy');
+});
+Route::controller(OrderController::class)->group(function () {
+    Route::post('order', 'store');
+    Route::get('orders',  'index')->name('orders.index');
+    Route::get('orders/{order}',  'show')->name('orders.show');
+    Route::delete('orders/{order}', 'destroy')->name('orders.destroy');
 });
 Route::controller(CategoryController::class)->middleware('isAdmin')->group(function () {
     Route::get('categories',  'index')->withoutMiddleware('isAdmin');

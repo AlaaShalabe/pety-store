@@ -11,7 +11,9 @@ class Order extends Model
 
     protected $fillable = [
         'total_Price',
-    
+        'status',
+        'user_id',
+
     ];
 
     public function user()
@@ -19,8 +21,18 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function order_items()
+    public function products()
     {
-        return $this->hasMany(Order_items::class );
+        return $this->belongsToMany(Product::class, 'order_items', 'order_id', 'product_id', 'id', 'id')
+            ->using(OrderItems::class)
+            ->as('order_item')
+            ->withPivot([
+                'amount', 'total_price',
+            ]);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(OrderItems::class, 'order_id');
     }
 }
