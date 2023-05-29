@@ -17,6 +17,10 @@ class CartController extends Controller
     }
     public function index()
     {
+        $carts = $this->cart->get();
+        return response()->json([
+            'carts' => $carts,
+        ]);
     }
 
     public function store(Request $request)
@@ -40,7 +44,10 @@ class CartController extends Controller
             'quantity' => ['required', 'int', 'min:1'],
         ]);
 
-        $this->cart->update($id, $request->post('quantity'));
+        $this->cart->update($id, $request->quantity);
+        return response()->json([
+            'message' => 'Item updated!',
+        ]);
     }
 
 
@@ -48,8 +55,8 @@ class CartController extends Controller
     {
         $this->cart->delete($id);
 
-        return [
+        return response()->json([
             'message' => 'Item deleted!',
-        ];
+        ]);
     }
 }

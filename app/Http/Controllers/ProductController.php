@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use App\Http\Requests\StoreProduct;
+use Illuminate\Support\Str;
 
 
 class ProductController extends Controller
@@ -17,14 +18,14 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::with('rates')->withCount('rates')->get();
-        return response()->json(['products' => $products]); 
+        return response()->json(['products' => $products]);
     }
-    
+
     public function store(StoreProduct $request)
     {
         $data = $request->validated();
-        $data['image'] = $request->file('image')->store('public/post_images');
-        $data['slug'] =str()->slug($request->slug);
+        //     $data['image'] = $request->file('image')->store('public/post_images');
+        $data['slug'] = Str::slug($request->name) ?? null;
         $product = Product::create($data);
         return response()->json([
             'message' => 'Product stored successfully.',
@@ -52,7 +53,7 @@ class ProductController extends Controller
     public function update(StoreProduct $request, Product $product)
     {
         $data = $request->validated();
-        $data['image']=$request->file('image')->store('public/post_images');
+        $data['image'] = $request->file('image')->store('public/post_images');
         $product->update($data);
         return response()->json([
             'message' => 'Product updated successfully.',
