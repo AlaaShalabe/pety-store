@@ -71,9 +71,9 @@ Route::controller(ProductController::class)->middleware('isAdmin')->group(functi
     Route::put('products/{product}',  'update')->name('products.update');
     Route::delete('products/{product}', 'destroy')->name('products.destroy');
 });
-Route::controller(RateController::class)->middleware('isAdmin')->group(function () {
+Route::controller(RateController::class)->middleware('auth:api')->group(function () {
     Route::get('rates',  'index')->name('rates.index');
-    Route::post('rates', 'store')->withoutMiddleware('isAdmin');
-    Route::put('rates/{rate}',  'update')->withoutMiddleware('isAdmin');
-    Route::delete('rates/{rate}', 'destroy')->withoutMiddleware('isAdmin');
+    Route::post('rates', 'store')->name('rates.store');
+    Route::put('rates/{rate}',  'update')->name('rates.update');
+    Route::delete('rates/{rate}', 'destroy')->name('rates.destroy');
 });
