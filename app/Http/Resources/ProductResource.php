@@ -25,5 +25,6 @@ class ProductResource extends JsonResource
                 'name' => $this->category->name
             ]
         ];
+       // return parent::toArray($request);
     }
 }

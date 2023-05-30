@@ -7,8 +7,11 @@ use App\Http\Controllers\Message\FeedbackController;
 use App\Http\Controllers\Message\SupportController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\SearchController;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -77,3 +80,6 @@ Route::controller(RateController::class)->middleware('auth:api')->group(function
     Route::put('rates/{rate}',  'update')->name('rates.update');
     Route::delete('rates/{rate}', 'destroy')->name('rates.destroy');
 });
+
+Route::post('search', [SearchController::class,'result']);
+
