@@ -41,8 +41,9 @@ class OrderController extends Controller
                 }
             }
             $orderItem = OrderItems::where('order_id', '=', $order->id)->get();
-            $total = $orderItem->sum('total_price');
-
+            $total =  $orderItem->sum('total_price');
+            $order->total_price = $total;
+            $order->save();
             $cart->empty();
             DB::commit();
         } catch (Exception $e) {
@@ -53,7 +54,6 @@ class OrderController extends Controller
         return response()->json([
             'msg' => 'created order ',
             'order' => $order,
-            'total price' => $total,
             'orderItem' => $orderItem
         ], 200);
     }
