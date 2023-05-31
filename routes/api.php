@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Message\FeedbackController;
@@ -52,16 +52,15 @@ Route::controller(CartController::class)->group(function () {
     Route::post('cart', 'store');
     Route::get('carts',  'index')->name('carts.index');
     Route::get('carts/{cart}',  'show')->name('carts.show');
+    Route::put('carts/{cart}',  'update')->name('carts.update');
     Route::delete('carts/{cart}', 'destroy')->name('carts.destroy');
 });
 Route::controller(OrderController::class)->group(function () {
-    Route::post('order', 'store');
-    Route::get('orders',  'index')->name('orders.index');
-    Route::get('orders/{order}',  'show')->name('orders.show');
-    Route::delete('orders/{order}', 'destroy')->name('orders.destroy');
+    Route::post('order', 'store')->middleware('auth');
 });
+
 Route::controller(CategoryController::class)->middleware('isAdmin')->group(function () {
-    Route::get('categories',  'index')->withoutMiddleware('isAdmin');
+      Route::get('categories',  'index')->withoutMiddleware('isAdmin');
     Route::get('categories/{category}',  'show')->withoutMiddleware('isAdmin');
     Route::post('categories', 'store')->name('categories.store');
     Route::put('categories/{category}',  'update')->name('categories.update');
