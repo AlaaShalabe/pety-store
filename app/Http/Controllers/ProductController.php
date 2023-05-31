@@ -10,11 +10,10 @@ use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct()
+    {
+        $this->middleware('isAdmin', ['except' => ['index', 'show']]);
+    }
     public function index()
     {
         $products = Product::with('rates')->withCount('rates')->get();
