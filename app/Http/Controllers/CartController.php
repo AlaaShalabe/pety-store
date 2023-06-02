@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Resources\CartResource;
 use App\Models\Cart;
 use App\Models\Product;
+use App\Models\User;
 use App\Repositories\CartRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
@@ -16,11 +18,12 @@ class CartController extends Controller
     {
         $this->cart = $cart;
     }
-    public function index()
+    public function inde()
     {
-        $carts = $this->cart->get();
+        $user = Auth::user()->id;
+        $cart_items =  Cart::where('user_id', '=', $user)->get();
         return response()->json([
-            'carts' => $carts,
+            'carts' => $cart_items,
         ]);
     }
 

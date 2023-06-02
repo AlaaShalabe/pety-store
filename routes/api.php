@@ -42,7 +42,6 @@ Route::controller(ForgotPasswordController::class)->group(function () {
     Route::post('/verify/code', 'verifycode');
 });
 Route::controller(ResetPasswordController::class)->group(function () {
-
     Route::post('/password/reset', 'resetPassword');
 });
 
@@ -55,15 +54,14 @@ Route::controller(FeedbackController::class)->middleware('isAdmin')->group(funct
 });
 
 Route::controller(SupportController::class)->middleware('isAdmin')->group(function () {
-    Route::post('support', 'store')->withoutMiddleware('isAdmin');
+    Route::post('supports', 'store')->withoutMiddleware('isAdmin');
     Route::get('supports',  'index')->name('supports.index');
     Route::get('supports/{message}',  'show')->name('supports.show');
     Route::delete('supports/{message}', 'destroy')->name('supports.destroy');
 });
 Route::controller(CartController::class)->group(function () {
-    Route::post('cart', 'store');
+    Route::post('carts', 'store');
     Route::get('carts',  'index')->name('carts.index');
-    Route::get('carts/{cart}',  'show')->name('carts.show');
     Route::put('carts/{cart}',  'update')->name('carts.update');
     Route::delete('carts/{cart}', 'destroy')->name('carts.destroy');
 });
