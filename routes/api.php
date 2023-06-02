@@ -8,10 +8,9 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Message\FeedbackController;
 use App\Http\Controllers\Message\SupportController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SearchController;
-use App\Models\Product;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
@@ -48,46 +47,49 @@ Route::controller(ResetPasswordController::class)->group(function () {
 
 Route::controller(FeedbackController::class)->middleware('isAdmin')->group(function () {
     Route::post('feedback', 'store')->withoutMiddleware('isAdmin');
-    Route::get('feedbacks',  'index')->name('feedbackes.index');
-    Route::get('feedbacks/{message}',  'show')->name('feedbackes.show');
-    Route::delete('feedbacks/{message}',  'destroy')->name('feedbackes.destroy');
+    Route::get('feedbacks',  'index');
+    Route::get('feedbacks/{message}',  'show');
+    Route::delete('feedbacks/{message}',  'destroy');
 });
 
 Route::controller(SupportController::class)->middleware('isAdmin')->group(function () {
     Route::post('supports', 'store')->withoutMiddleware('isAdmin');
-    Route::get('supports',  'index')->name('supports.index');
-    Route::get('supports/{message}',  'show')->name('supports.show');
-    Route::delete('supports/{message}', 'destroy')->name('supports.destroy');
+    Route::get('supports',  'index');
+    Route::get('supports/{message}', 'show');
+    Route::delete('supports/{message}', 'destroy');
 });
 Route::controller(CartController::class)->group(function () {
     Route::post('carts', 'store');
-    Route::get('carts',  'index')->name('carts.index');
-    Route::put('carts/{cart}',  'update')->name('carts.update');
-    Route::delete('carts/{cart}', 'destroy')->name('carts.destroy');
+    Route::get('carts',  'index');
+    Route::put('carts/{cart}',  'update');
+    Route::delete('carts/{cart}', 'destroy');
 });
 Route::controller(OrderController::class)->group(function () {
-    Route::post('order', 'store')->middleware('auth');
+    Route::post('order', 'store');
+});
+Route::controller(PaymentController::class)->group(function () {
+    Route::post('payment', 'pay');
 });
 
 Route::controller(CategoryController::class)->middleware('isAdmin')->group(function () {
     Route::get('categories',  'index')->withoutMiddleware('isAdmin');
     Route::get('categories/{category}',  'show')->withoutMiddleware('isAdmin');
-    Route::post('categories', 'store')->name('categories.store');
-    Route::put('categories/{category}',  'update')->name('categories.update');
-    Route::delete('categories/{category}', 'destroy')->name('categories.destroy');
+    Route::post('categories', 'store');
+    Route::put('categories/{category}',  'update');
+    Route::delete('categories/{category}', 'destroy');
 });
 Route::controller(ProductController::class)->group(function () {
-    Route::get('products',  'index')->name('products.index');
-    Route::get('products/{product}/show',  'show')->name('product.show');
-    Route::post('products/store', 'store')->name('products.store');
-    Route::put('products/{product}/update',  'update')->name('products.update');
-    Route::delete('products/{product}/delete', 'destroy')->name('products.destroy');
+    Route::get('products',  'index');
+    Route::get('products/{product}/show',  'show');
+    Route::post('products/store', 'store');
+    Route::put('products/{product}/update',  'update');
+    Route::delete('products/{product}/delete', 'destroy');
 });
 Route::controller(RateController::class)->middleware('auth:api')->group(function () {
-    Route::get('rates',  'index')->name('rates.index');
-    Route::post('rates', 'store')->name('rates.store');
-    Route::put('rates/{rate}',  'update')->name('rates.update');
-    Route::delete('rates/{rate}', 'destroy')->name('rates.destroy');
+    Route::get('rates',  'index');
+    Route::post('rates', 'store');
+    Route::put('rates/{rate}',  'update');
+    Route::delete('rates/{rate}', 'destroy');
 });
 
 Route::post('search', [SearchController::class, 'result']);

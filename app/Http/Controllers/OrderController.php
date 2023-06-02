@@ -15,6 +15,10 @@ use Mockery\Exception\InvalidOrderException;
 class OrderController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
     public function store(Request $request, CartRepository $cart)
     {
         $request->validate([
@@ -24,7 +28,7 @@ class OrderController extends Controller
         if ($cart->get()->count() == 0) {
             throw new InvalidOrderException('Cart is empty');
         }
-        $items = $cart->get()->groupBy('product.product_id')->all();
+        $items = $cart->get()->groupBy('cart.cart_id')->all();
         DB::beginTransaction();
         try {
             foreach ($items as  $cart_items) {
