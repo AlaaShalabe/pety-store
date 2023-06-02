@@ -14,13 +14,14 @@ class ResetPasswordController extends Controller
 {
     public function resetPassword(Request $request)
     {
-        $user = User::where('email', $request->email);
+        $user = User::where('email', '=', $request->email)->first();
         $user->update([
             'password' => Hash::make($request->password)
         ]);
-
+        $token = Auth::login($user);
         return response()->json(
             [
+                'token' => $token,
                 'success' => true,
                 'message' => "Your password has been reset",
             ],
