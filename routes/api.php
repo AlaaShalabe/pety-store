@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\Message\FeedbackController;
@@ -34,6 +36,16 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
 });
+Route::controller(ForgotPasswordController::class)->group(function () {
+
+    Route::post('/password/forgot', 'forgetPassword');
+    Route::post('/verify/code', 'verifycode');
+});
+Route::controller(ResetPasswordController::class)->group(function () {
+
+    Route::post('/password/reset', 'resetPassword');
+});
+
 
 Route::controller(FeedbackController::class)->middleware('isAdmin')->group(function () {
     Route::post('feedback', 'store')->withoutMiddleware('isAdmin');
@@ -52,14 +64,13 @@ Route::controller(CartController::class)->group(function () {
     Route::post('cart', 'store');
     Route::get('carts',  'index')->name('carts.index');
     Route::get('carts/{cart}',  'show')->name('carts.show');
+    Route::put('carts/{cart}',  'update')->name('carts.update');
     Route::delete('carts/{cart}', 'destroy')->name('carts.destroy');
 });
 Route::controller(OrderController::class)->group(function () {
-    Route::post('order', 'store');
-    Route::get('orders',  'index')->name('orders.index');
-    Route::get('orders/{order}',  'show')->name('orders.show');
-    Route::delete('orders/{order}', 'destroy')->name('orders.destroy');
+    Route::post('order', 'store')->middleware('auth');
 });
+
 Route::controller(CategoryController::class)->middleware('isAdmin')->group(function () {
     Route::get('categories',  'index')->withoutMiddleware('isAdmin');
     Route::get('categories/{category}',  'show')->withoutMiddleware('isAdmin');
@@ -67,12 +78,12 @@ Route::controller(CategoryController::class)->middleware('isAdmin')->group(funct
     Route::put('categories/{category}',  'update')->name('categories.update');
     Route::delete('categories/{category}', 'destroy')->name('categories.destroy');
 });
-Route::controller(ProductController::class)->middleware('isAdmin')->group(function () {
-    Route::get('products',  'index')->withoutMiddleware('isAdmin');
-    Route::get('products/{product}',  'show')->withoutMiddleware('isAdmin');
-    Route::post('products', 'store')->name('products.store');
-    Route::put('products/{product}',  'update')->name('products.update');
-    Route::delete('products/{product}', 'destroy')->name('products.destroy');
+Route::controller(ProductController::class)->group(function () {
+    Route::get('products',  'index')->name('products.index');
+    Route::get('products/{product}/show',  'show')->name('product.show');
+    Route::post('products/store', 'store')->name('products.store');
+    Route::put('products/{product}/update',  'update')->name('products.update');
+    Route::delete('products/{product}/delete', 'destroy')->name('products.destroy');
 });
 Route::controller(RateController::class)->middleware('auth:api')->group(function () {
     Route::get('rates',  'index')->name('rates.index');
@@ -81,5 +92,4 @@ Route::controller(RateController::class)->middleware('auth:api')->group(function
     Route::delete('rates/{rate}', 'destroy')->name('rates.destroy');
 });
 
-Route::post('search', [SearchController::class,'result']);
-
+Route::post('search', [SearchController::class, 'result']);
