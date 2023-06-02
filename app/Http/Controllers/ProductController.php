@@ -26,13 +26,23 @@ class ProductController extends Controller
         $data = $request->validated();
         //     $data['image'] = $request->file('image')->store('public/post_images');
         $data['slug'] = Str::slug($request->name) ?? null;
+        if ($data['category_id']==4){
+            $data['code']=$this->generateUniqueCode();
+        }
         $product = Product::create($data);
         return response()->json([
             'message' => 'Product stored successfully.',
             'data' => new ProductResource($product),
         ]);
     }
-
+    public function generateUniqueCode()
+    {
+        do {
+            $code = random_int(100000, 999999);
+        } while (Product::where("code", "=", $code)->first());
+  
+        return $code;
+    }
     /**
      * Display the specified resource.
      *
