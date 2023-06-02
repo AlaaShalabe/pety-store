@@ -81,5 +81,15 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Rate::class);
     }
 
+    /**
+     * Get all of the trackers for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function trackers(): HasMany
+    {
+        return $this->hasMany(Tracker::class);
+    }
+
 
 }
