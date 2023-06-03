@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Auth;
 
 class FeedbackController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('isAdmin', ['except' => 'store']);
+    }
+
     public function index()
     {
         $messages =  Message::where('is_feedback', '=', 1)->get();

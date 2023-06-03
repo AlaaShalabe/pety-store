@@ -10,6 +10,10 @@ use Illuminate\Http\Request;
 
 class SupportController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('isAdmin', ['except' => 'store']);
+    }
     public function index()
     {
         $messages =  Message::where('is_feedback', '=', 0)->get();
@@ -34,7 +38,7 @@ class SupportController extends Controller
             'data' => new SupportResource($message)
         ]);
     }
-    
+
     public function destroy(Message $message)
     {
         Message::find($message);
