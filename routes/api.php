@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\Auth\ProfileController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\Auth\SocialiteController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\GPSController;
@@ -41,38 +43,51 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
 });
-Route::controller(ForgotPasswordController::class)->group(function () {
+Route::controller(ProfileController::class)->group(function () {
 
+    Route::put('setting/{id}/image', 'changeImage');
+    Route::put('setting/{id}/address', 'changeAddress');
+});
+
+Route::controller(ForgotPasswordController::class)->group(function () {
     Route::post('/password/forgot', 'forgetPassword');
     Route::post('/verify/code', 'verifycode');
 });
+
 Route::controller(ResetPasswordController::class)->group(function () {
     Route::post('/password/reset', 'resetPassword');
 });
 
+Route::controller(SocialiteController::class)->group(function () {
+    Route::get('redirect/{provider}', 'redirect');
+    Route::get('callback/{provider}', 'callback');
+});
 
-Route::controller(FeedbackController::class)->middleware('isAdmin')->group(function () {
-    Route::post('feedback', 'store')->withoutMiddleware('isAdmin');
+Route::controller(FeedbackController::class)->group(function () {
+    Route::post('feedback', 'store');
     Route::get('feedbacks',  'index');
     Route::get('feedbacks/{message}',  'show');
     Route::delete('feedbacks/{message}',  'destroy');
 });
 
-Route::controller(SupportController::class)->middleware('isAdmin')->group(function () {
-    Route::post('supports', 'store')->withoutMiddleware('isAdmin');
+Route::controller(SupportController::class)->group(function () {
+    Route::post('supports', 'store');
     Route::get('supports',  'index');
     Route::get('supports/{message}', 'show');
     Route::delete('supports/{message}', 'destroy');
 });
+
 Route::controller(CartController::class)->group(function () {
     Route::post('carts', 'store');
     Route::get('carts',  'index');
     Route::put('carts/{cart}',  'update');
     Route::delete('carts/{cart}', 'destroy');
 });
+
 Route::controller(OrderController::class)->group(function () {
     Route::post('order', 'store');
 });
+
 Route::controller(PaymentController::class)->group(function () {
     Route::post('payment', 'pay');
 });
@@ -84,19 +99,15 @@ Route::controller(CategoryController::class)->middleware('isAdmin')->group(funct
     Route::put('categories/{category}',  'update');
     Route::delete('categories/{category}', 'destroy');
 });
+
 Route::controller(ProductController::class)->group(function () {
     Route::get('products',  'index');
     Route::get('products/{product}/show',  'show');
     Route::post('products/store', 'store');
     Route::put('products/{product}/update',  'update');
     Route::delete('products/{product}/delete', 'destroy');
-Route::controller(ProductController::class)->middleware('isAdmin')->group(function () {
-    Route::get('products',  'index')->withoutMiddleware('isAdmin');
-    Route::get('products/{product}',  'show')->withoutMiddleware('isAdmin');
-    Route::post('products', 'store')->name('products.store')->withoutMiddleware('isAdmin');
-    Route::put('products/{product}',  'update')->name('products.update');
-    Route::delete('products/{product}', 'destroy')->name('products.destroy');
 });
+
 Route::controller(RateController::class)->middleware('auth:api')->group(function () {
     Route::get('rates',  'index');
     Route::post('rates', 'store');
