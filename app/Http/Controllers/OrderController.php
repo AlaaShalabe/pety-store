@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItems;
+use App\Models\Product;
 use App\Models\Tracker;
 use App\Repositories\CartRepository;
 use Exception;
@@ -43,11 +43,13 @@ class OrderController extends Controller
                         'total_price' => $cart->total(),
                         'amount' => $item->quantity,
                     ]);
-                    if ($item->product->code)
+                    if ($item->product->category_id == 4) {
+                        $code =$this->generateUniqueCode();
                         Tracker::create([
                             'user_id' => Auth::id(),
-                            'code' => $item->product->code,
+                            'code' => $code,
                         ]);
+                    }
                 }
             }
             $orderItem = OrderItems::where('order_id', '=', $order->id)->get();
@@ -66,5 +68,13 @@ class OrderController extends Controller
             'order' => $order,
             'orderItem' => $orderItem
         ], 200);
+    }
+    public function generateUniqueCode()
+    {
+        do {
+            $code = random_int(100000, 999999);
+        } while (Product::where("code", "=", $code)->first());
+
+        return $code;
     }
 }

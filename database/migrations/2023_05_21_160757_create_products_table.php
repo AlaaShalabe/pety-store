@@ -20,7 +20,6 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->float('price');
             $table->string('slug')->nullable();
-            $table->integer('code')->nullable();
             $table->bigInteger('category_id')->unsigned();
             $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
             $table->timestamps();
