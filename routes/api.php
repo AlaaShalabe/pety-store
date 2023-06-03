@@ -39,7 +39,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(AuthController::class)->group(function () {
     Route::post('login', 'login');
-    Route::post('register', 'register');
+    Route::post('/register', 'register');
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
 });
@@ -77,7 +77,7 @@ Route::controller(SupportController::class)->group(function () {
     Route::delete('supports/{message}', 'destroy');
 });
 
-Route::controller(CartController::class)->group(function () {
+Route::controller(CartController::class)->middleware('auth:api')->group(function () {
     Route::post('carts', 'store');
     Route::get('carts',  'index');
     Route::put('carts/{cart}',  'update');
