@@ -28,7 +28,7 @@ class CartImplementRepository implements CartRepository
 
     public function add(Product $product, $quantity = 1)
     {
-        $item =  Cart::where('product_id', '=', $product->id)
+        $item =  Cart::where('product_id', '=', $product->id,)->where('user_id', '=', Auth::id())
             ->first();
 
         if (!$item) {
