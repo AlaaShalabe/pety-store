@@ -16,17 +16,18 @@ class ProductController extends Controller
     }
     public function index()
     {
-        $products = Product::with('rates')->withCount('rates')->get();
+        $products = Product::paginate(8)->with('rates')->withCount('rates')->get();
         return response()->json(['products' => $products]);
     }
 
     public function store(StoreProduct $request)
     {
         $data = $request->validated();
-        //     $data['image'] = $request->file('image')->store('public/post_images');
-        $data['slug'] = Str::slug($request->name) ?? null;
-        if ($data['category_id'] == 4 ){
-            $data['code']=$this->generateUniqueCode();
+        $slug = $request->name;
+        $data['image'] = $request->file('image')->store('public/post_images');
+        $data['slug'] = Str::slug($slug);
+        if ($data['category_id'] == 4) {
+            $data['code'] = $this->generateUniqueCode();
         }
         $product = Product::create($data);
         return response()->json([

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\Order;
 use App\Models\OrderItems;
+use App\Models\Tracker;
 use App\Repositories\CartRepository;
 use Exception;
 use Illuminate\Http\Request;
@@ -42,6 +43,11 @@ class OrderController extends Controller
                         'total_price' => $cart->total(),
                         'amount' => $item->quantity,
                     ]);
+                    if ($item->product->code)
+                        Tracker::create([
+                            'user_id' => Auth::id(),
+                            'code' => $item->product->code,
+                        ]);
                 }
             }
             $orderItem = OrderItems::where('order_id', '=', $order->id)->get();
